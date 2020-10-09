@@ -3,6 +3,9 @@ import {GameState} from "bomberhuman";
 const canvas = document.getElementById("bomberhuman-canvas");
 const gamestate = GameState.new();
 
+canvas.width = gamestate.width();
+canvas.height = gamestate.height();
+
 const GRID_COLOR = "#CCCCCC";
 const ctx = canvas.getContext('2d');
 
