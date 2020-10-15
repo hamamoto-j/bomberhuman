@@ -1,10 +1,10 @@
-import {GameState} from "bomberhuman";
+import {GameData} from "bomberhuman";
 
 const canvas = document.getElementById("bomberhuman-canvas");
-const gamestate = GameState.new();
+const gamedata = GameData.new();
 
-canvas.width = gamestate.width();
-canvas.height = gamestate.height();
+canvas.width = gamedata.width();
+canvas.height = gamedata.height();
 
 const GRID_COLOR = "#CCCCCC";
 const ctx = canvas.getContext('2d');
@@ -33,20 +33,18 @@ const clear_screen = () => {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 };
 
-const renderLoop = () => {
-    document.addEventListener('keydown', e => gamestate.action(e.key, true));
-    document.addEventListener('keyup', e => gamestate.action(e.key, false));
-    
-    gamestate.update();
+document.addEventListener('keydown', e => gamedata.action(e.key, true));
+document.addEventListener('keyup', e => gamedata.action(e.key, false));
+
+const renderLoop = () => {    
+    gamedata.update();
     clear_screen();
     
-    drawPlayer(gamestate.p_x(), gamestate.p_y());
+    drawPlayer(gamedata.p_x(), gamedata.p_y());
     
     requestAnimationFrame(renderLoop);
 };
 
-document.addEventListener(`keydown`, e => console.log(e.key));
-
 clear_screen();
-drawPlayer(gamestate.p_x(), gamestate.p_y());
+drawPlayer(gamedata.p_x(), gamedata.p_y());
 requestAnimationFrame(renderLoop);
