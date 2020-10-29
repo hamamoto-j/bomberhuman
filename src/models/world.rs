@@ -16,7 +16,7 @@ impl World {
     /// Returns a new world of the given size
     pub fn new() -> World {
         World {
-            player: Player::new(64, 64, 2),
+            player: Player::new(64, 64, 3),
             bomb: Vec::new(),
             obj: vec![1,1,1,1,1,1,1,1,1,1,1,1,1,
                       1,0,0,0,0,0,0,0,0,0,0,0,1,

@@ -33,14 +33,14 @@ impl GameState{
         for bomb in &mut self.world.bomb{
             bomb.update();
             // bomb.ttl = bomb.ttl -1;
-            if bomb.ttl() < 0{
+            if !bomb.is_alive(){
                 let bomb_idx = utils::pos_to_idx(bomb.position());
                 self.world.obj.remove(bomb_idx);
                 self.world.obj.insert(bomb_idx, 0); // 0 = Nothing
             }
         }
 
-        self.world.bomb.retain(|x| x.ttl() < 0);
+        self.world.bomb.retain(|x| x.is_alive()); 
 
         if self.world.player.put_bomb_state(){
             let player_idx = utils::pos_to_idx(self.world.player.position());

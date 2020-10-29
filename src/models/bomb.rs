@@ -1,6 +1,6 @@
 use crate::geometry::Point;
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct Bomb{
     pos: Point,
     ttl: i32, 
@@ -10,12 +10,16 @@ impl Bomb{
     pub fn new(pos: Point) -> Bomb{
         Bomb {
             pos: pos,
-            ttl: 3,
+            ttl: 10,
         }
     }
 
     pub fn update(&mut self){
         self.ttl = self.ttl -1;
+    }
+
+    pub fn is_alive(&self) -> bool{
+        self.ttl > 0 
     }
 
     pub fn x(&self) -> i32{
