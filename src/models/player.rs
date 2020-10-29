@@ -6,6 +6,7 @@ use crate::geometry::Point;
 pub struct Player{
     pos: Point,
     speed: i32,
+    put_bomb: bool,
 }
 
 impl Player{
@@ -13,10 +14,11 @@ impl Player{
         Player {
             pos: Point::new(x,y),
             speed: speed,
+            put_bomb: false,
         }
     }
 
-    pub fn update(&mut self, keys : Keys) {
+    pub fn update(&mut self, keys : Keys){
         if keys.arrow_up == true {
             self.pos.y -= self.speed;
         }
@@ -29,6 +31,7 @@ impl Player{
         if keys.arrow_left {
             self.pos.x -= self.speed;
         }   
+        self.put_bomb = keys.space;
     }
 
     pub fn x(&self) -> i32{
@@ -37,5 +40,18 @@ impl Player{
 
     pub fn y(&self) -> i32{
         self.pos.y
+    }
+
+    pub fn position(&self) -> Point{
+        self.pos
+    }
+
+    pub fn put_bomb_state(&self) -> bool{
+        self.put_bomb
+    }
+
+    pub fn move_to(&mut self, move_point: Point){
+        self.pos.x = move_point.x;
+        self.pos.y = move_point.y;
     }
 }
