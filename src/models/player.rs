@@ -1,6 +1,8 @@
 use crate::controllers::Keys;
 use crate::geometry::Point;
 
+use std::cmp;
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Player {
     pub pos: Point,
@@ -40,6 +42,15 @@ impl Player {
                 self.pos.x -= self.speed;
             }
             self.put_bomb = keys.space;
+        }
+    }
+
+    pub fn pow_up(pow_id) {
+        match pow_id{
+            1 => {player.speed = min(player.speed++, 9)}
+            2 => {player.bomb_num = min(player.bomb_num++, 9)}
+            3 => {player.fire_num = min(player.fire_num++, 9)}
+            _ => {}
         }
     }
 
