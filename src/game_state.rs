@@ -63,7 +63,7 @@ impl GameState {
             }
         }
 
-        //Player Vec をループ
+        //Player Vec をループ:player を　update
         for player in &mut self.world.player {
             player.update(self.world.keys[player.id as usize]);
 
@@ -143,9 +143,11 @@ impl GameState {
         for fire in &mut self.world.fire {
             match self.world.obj[utils::pos_to_idx(fire.pos)] {
                 1 => {
+                    // 1 = wall
                     fire.ttl = 0;
                 }
                 4 => {
+                    // 4 = bomb
                     fire.ttl = 0;
                     for bomb in &mut self.world.bomb {
                         if utils::is_eq_pos(fire.pos, bomb.pos) {
@@ -170,6 +172,12 @@ impl GameState {
                 let obj_pos = utils::idx_to_pos(i);
 
                 match obj_num {
+                    //     Non = 0,
+                    //     Wall = 1,
+                    //     Brock = 2,
+                    //     Pow = 3,
+                    //     Bomb = 4,
+                    //     Brock + Pow = 5,
                     1 => {
                         let mut move_point = CollisionController::player_to_wall_horizonal(
                             &player.position(),

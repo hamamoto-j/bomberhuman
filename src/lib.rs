@@ -79,6 +79,10 @@ impl GameData {
         for (i, obj_num) in self.state.world.obj.iter().enumerate() {
             //     Non = 0,
             //     Wall = 1,
+            //     Brock = 2,
+            //     Pow = 3,
+            //     Bomb = 4,
+            //     Brock + Pow = 5,
             let obj_point = utils::idx_to_pos(i);
             match obj_num {
                 1 => draw.draw_wall(obj_point.x, obj_point.y),
