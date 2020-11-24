@@ -1,7 +1,7 @@
+use std::cmp::min;
+
 use crate::controllers::Keys;
 use crate::geometry::Point;
-
-use std::cmp;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Player {
@@ -45,11 +45,11 @@ impl Player {
         }
     }
 
-    pub fn pow_up(pow_id) {
+    pub fn pow_up(&mut self, pow_id: i32) {
         match pow_id{
-            1 => {player.speed = min(player.speed++, 9)}
-            2 => {player.bomb_num = min(player.bomb_num++, 9)}
-            3 => {player.fire_num = min(player.fire_num++, 9)}
+            1 => {self.speed = min(self.speed + 1, 9)}
+            2 => {self.bomb_num = min(self.bomb_num + 1, 9)}
+            3 => {self.fire_num = min(self.fire_num + 1, 9)}
             _ => {}
         }
     }
