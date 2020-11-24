@@ -8,6 +8,7 @@ function resources(){
     let res = {
         player: document.createElement('canvas'),
         bomb: document.createElement('canvas'),
+        fire: document.createElement('canvas'),
         wall: document.createElement('canvas')
     }
 
@@ -50,6 +51,26 @@ function resources(){
     bmCtx.fill() ;
     // 線を描画を実行
     bmCtx.stroke();
+
+    //Fire
+    res.fire.width = 32;
+    res.fire.height = 32;
+    let frCtx = res.fire.getContext('2d');
+    frCtx.beginPath();
+    frCtx.strokeStyle = GRID_COLOR;
+    // arc(x座標, 
+    //     y座標,
+    //     半径, 
+    //     開始角度: 0度 (0 * Math.PI / 180), 
+    //     終了角度: 360度 (360 * Math.PI / 180),  
+    //     方向: true=反時計回りの円、false=時計回りの円);
+    frCtx.arc(16, 16, 16, 0 * Math.PI / 180, 360 * Math.PI / 180, false ) ;
+    // 塗りつぶしの色    
+    frCtx.fillStyle = "rgba(200,30,30,0.8)";
+    // 塗りつぶしを実行 
+    frCtx.fill();
+    // 線を描画を実行
+    frCtx.stroke();
 
     // Wall
     res.wall.width = 32;
@@ -94,6 +115,13 @@ export class Draw {
     draw_bomb(x, y) {
         ctx.translate(x-16, y-16);
         ctx.drawImage(res.bomb, 0, 0);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.fillStyle = "black";  
+    }
+
+    draw_fire(x, y) {
+        ctx.translate(x-16, y-16);
+        ctx.drawImage(res.fire, 0, 0);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.fillStyle = "black";  
     }

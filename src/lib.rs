@@ -1,14 +1,22 @@
 mod controllers;
-mod geometry;
 mod game_state;
+mod geometry;
 mod models;
+
+use crate::controllers::Keys;
+use crate::models::Player;
 
 use wasm_bindgen::prelude::*;
 
-use std::os::raw::{c_int};
+use std::os::raw::c_int;
 mod utils;
 
 use self::game_state::GameState;
+
+#[wasm_bindgen]
+pub fn init_panic_hook() {
+    console_error_panic_hook::set_once();
+}
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
@@ -24,6 +32,7 @@ pub struct GameData {
 #[wasm_bindgen]
 impl GameData {
     pub fn new() -> GameData {
+        init_panic_hook();
         let draw = Draw::new();
         let width = draw.width(512);
         let height = draw.height(512);
@@ -32,12 +41,20 @@ impl GameData {
         }
     }
 
+    pub fn add_player(&mut self, player_idx: i32) {
+        for i in 0..player_idx {
+            let new_player = Player::new(utils::players_pos(i), i);
+            self.state.world.player.push(new_player);
+            self.state.world.keys.push(Keys::new());
+        }
+    }
+
     pub fn update(&mut self) {
         self.state.update();
     }
 
-    pub fn action(&mut self, s: &str, b: bool){
-        self.state.action(s,b);
+    pub fn action(&mut self, s: &str, b: bool) {
+        self.state.action(s, b);
     }
 
     pub fn width(&self) -> i32 {
@@ -48,35 +65,33 @@ impl GameData {
         self.state.height()
     }
 
-    pub fn p_x(&mut self) -> i32 {
-        self.state.p_x()
-    }
-
-    pub fn p_y(&mut self) -> i32 {
-        self.state.p_y()
-    }
-
-    pub fn draw(&mut self){
+    pub fn draw(&mut self) {
         let draw = Draw::new();
 
         draw.clear_screen();
 
-        draw.draw_player(self.state.p_x(), self.state.p_y());
+        for player in &self.state.world.player {
+            if player.is_alive {
+                draw.draw_player(player.x(), player.y());
+            }
+        }
 
         for (i, obj_num) in self.state.world.obj.iter().enumerate() {
             //     Non = 0,
             //     Wall = 1,
-            //     SoftBlock = 2,
-            //     Pow = 3,
-            //     Bomb = 4,
-            //     Fire = 5, 
-            //     Soft_Pow = 6,
             let obj_point = utils::idx_to_pos(i);
             match obj_num {
                 1 => draw.draw_wall(obj_point.x, obj_point.y),
-                4 => draw.draw_bomb(obj_point.x, obj_point.y),
                 _ => (),
             }
+        }
+
+        for bomb in &self.state.world.bomb {
+            draw.draw_bomb(bomb.x(), bomb.y());
+        }
+
+        for fire in &self.state.world.fire {
+            draw.draw_fire(fire.x(), fire.y());
         }
     }
 }
@@ -102,6 +117,9 @@ extern "C" {
 
     #[wasm_bindgen(method)]
     pub fn draw_bomb(this: &Draw, _: c_int, _: c_int);
+
+    #[wasm_bindgen(method)]
+    pub fn draw_fire(this: &Draw, _: c_int, _: c_int);
 
     #[wasm_bindgen(method)]
     pub fn draw_wall(this: &Draw, _: c_int, _: c_int);

@@ -2,15 +2,17 @@ use crate::geometry::Point;
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct Bomb{
-    pos: Point,
-    ttl: i32, 
+    pub pos: Point,
+    pub ttl: i32, 
+    pub player_idx: i32,
 }
 
 impl Bomb{
-    pub fn new(pos: Point) -> Bomb{
+    pub fn new(pos: Point, player_idx: i32) -> Bomb{
         Bomb {
             pos: pos,
-            ttl: 10,
+            ttl: 180,
+            player_idx: player_idx,
         }
     }
 
