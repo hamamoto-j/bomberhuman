@@ -1,6 +1,8 @@
 use crate::controllers::CollisionController;
+use crate::geometry::Point;
 use crate::models::Bomb;
 use crate::models::Fire;
+use crate::models::Player;
 use crate::models::World;
 
 use crate::utils;
@@ -43,6 +45,47 @@ impl GameState {
     }
 
     pub fn update(&mut self) {
+        //Player Vec をループ:player を　update
+        for player in &mut self.world.player {
+            player.update(self.world.keys[player.id as usize]);
+        }
+
+        let mut players: [Player; 4] = [
+            Player::new(Point::new(0, 0), 0),
+            Player::new(Point::new(0, 0), 0),
+            Player::new(Point::new(0, 0), 0),
+            Player::new(Point::new(0, 0), 0),
+        ];
+        players.clone_from_slice(&self.world.player);
+
+        for player in &mut self.world.player {
+            //bomb の設置
+            if player.put_bomb_state() && player.bomb_num >= 1 {
+                let player_idx = utils::pos_to_idx(player.position());
+                match self.world.obj.get(player_idx).unwrap() {
+                    0 => {
+                        let p_pos = utils::idx_to_pos(player_idx);
+                        let mut p_list = Vec::new();
+                        for p in &players {
+                            if CollisionController::player_to_bomb(&p_pos, &p.pos) {
+                                p_list.push(p.id);
+                            }
+                        }
+                        // 0 = Nothing
+                        self.world.obj.remove(player_idx);
+                        self.world.obj.insert(player_idx, 4); // 4 = Bomb
+                        self.world.bomb.push(Bomb::new(
+                            utils::idx_to_pos(player_idx),
+                            player.id,
+                            p_list,
+                        ));
+                        player.bomb_num -= 1;
+                    }
+                    _ => (),
+                }
+            }
+        }
+
         //bomb の更新
         for bomb in &mut self.world.bomb {
             bomb.update();
@@ -63,30 +106,7 @@ impl GameState {
             }
         }
 
-        //Player Vec をループ:player を　update
-        for player in &mut self.world.player {
-            player.update(self.world.keys[player.id as usize]);
-
-            //bomb の設置
-            if player.put_bomb_state() && player.bomb_num >= 1 {
-                let player_idx = utils::pos_to_idx(player.position());
-                match self.world.obj.get(player_idx).unwrap() {
-                    0 => {
-                        // 0 = Nothing
-                        self.world.obj.remove(player_idx);
-                        self.world.obj.insert(player_idx, 4); // 4 = Bomb
-                        self.world
-                            .bomb
-                            .push(Bomb::new(utils::idx_to_pos(player_idx), player.id));
-                        player.bomb_num -= 1;
-                    }
-                    _ => (),
-                }
-            }
-        }
-
         let mut fire_queue = Vec::new();
-
         //fireの更新
         for fire in &mut self.world.fire {
             fire.update();
@@ -98,28 +118,28 @@ impl GameState {
                             fire.base_ttl,
                             fire.spread_t,
                             fire.child - 1,
-                            1,
+                            1, // 1 = up
                         ));
                         fire_queue.push(Fire::new(
                             fire.position(),
                             fire.base_ttl,
                             fire.spread_t,
                             fire.child - 1,
-                            2,
+                            2, // 2=right
                         ));
                         fire_queue.push(Fire::new(
                             fire.position(),
                             fire.base_ttl,
                             fire.spread_t,
                             fire.child - 1,
-                            3,
+                            3, // 3=down
                         ));
                         fire_queue.push(Fire::new(
                             fire.position(),
                             fire.base_ttl,
                             fire.spread_t,
                             fire.child - 1,
-                            4,
+                            4, //4 = left
                         ));
                     }
                     _ => {
@@ -146,6 +166,15 @@ impl GameState {
                     // 1 = wall
                     fire.ttl = 0;
                 }
+                2 => {
+                    // 2 = brock
+                    fire.ttl = 0;
+                    for brock in &mut self.world.brock {
+                        if utils::is_eq_pos(fire.pos, brock.pos) {
+                            brock.is_broken = true;
+                        }
+                    }
+                }
                 4 => {
                     // 4 = bomb
                     fire.ttl = 0;
@@ -159,15 +188,31 @@ impl GameState {
             }
         }
 
+        //brockの更新とマップの更新
+        for brock in &mut self.world.brock {
+            brock.update();
+            if !brock.is_alive() {
+                let brock_idx = utils::pos_to_idx(brock.pos);
+                self.world.obj.remove(brock_idx);
+                self.world.obj.insert(brock_idx, 0); // 0 = non
+            }
+        }
+
+        //寿命が0になった brock の削除
+        self.world.brock.retain(|x| x.is_alive());
+
         //寿命が0になった bomb の削除
         self.world.bomb.retain(|x| x.is_alive());
 
         //寿命が0になった fire の削除
         self.world.fire.retain(|x| x.is_alive());
 
+        //寿命が0になった pow の削除
+        self.world.pow.retain(|x| x.is_alive());
+
         //各プレイヤーの衝突判定
         for player in &mut self.world.player {
-            //collision 判定
+            //wall collision 判定
             for (i, obj_num) in self.world.obj.iter().enumerate() {
                 let obj_pos = utils::idx_to_pos(i);
 
@@ -197,6 +242,25 @@ impl GameState {
                         );
                         player.move_to(move_point);
                     }
+                    2 => {
+                        let mut move_point = CollisionController::player_to_wall_horizonal(
+                            &player.position(),
+                            &obj_pos,
+                        );
+                        player.move_to(move_point);
+
+                        move_point = CollisionController::player_to_wall_vertical(
+                            &player.position(),
+                            &obj_pos,
+                        );
+                        player.move_to(move_point);
+
+                        move_point = CollisionController::player_to_wall_corner(
+                            &player.position(),
+                            &obj_pos,
+                        );
+                        player.move_to(move_point);
+                    }
                     _ => (),
                 }
             }
@@ -204,6 +268,30 @@ impl GameState {
             for fire in &self.world.fire {
                 if CollisionController::player_to_fire(&player.pos, &fire.pos) {
                     player.is_alive = false;
+                }
+            }
+
+            for bomb in &mut self.world.bomb {
+                if CollisionController::player_to_bomb(&player.pos, &bomb.pos) {
+                    if !bomb.player_list.contains(&player.id) {
+                        //bombのplayer_listに含まれていないidのプレイヤーの場合＝＞衝突
+                        let mut move_point =
+                            CollisionController::player_to_wall_horizonal(&player.pos, &bomb.pos);
+                        player.move_to(move_point);
+
+                        move_point =
+                            CollisionController::player_to_wall_vertical(&player.pos, &bomb.pos);
+                        player.move_to(move_point);
+                    }
+                } else {
+                    bomb.player_list.retain(|&x| x != player.id);
+                }
+            }
+
+            for pow in &mut self.world.pow {
+                if CollisionController::player_to_bomb(&player.pos, &pow.pos) {
+                    pow.ttl = 0;
+                    player.pow_up(pow.id);
                 }
             }
         }

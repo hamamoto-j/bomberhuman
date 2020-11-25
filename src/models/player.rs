@@ -18,7 +18,7 @@ impl Player {
     pub fn new(pos: Point, id: i32) -> Player {
         Player {
             pos: pos,
-            speed: 2,
+            speed: 1,
             bomb_num: 1,
             fire_num: 1,
             put_bomb: false,
@@ -42,14 +42,18 @@ impl Player {
                 self.pos.x -= self.speed;
             }
             self.put_bomb = keys.space;
+        } else {
+            self.pos.y = 0;
+            self.pos.x = 0;
+            self.put_bomb = false;
         }
     }
 
     pub fn pow_up(&mut self, pow_id: i32) {
-        match pow_id{
-            1 => {self.speed = min(self.speed + 1, 9)}
-            2 => {self.bomb_num = min(self.bomb_num + 1, 9)}
-            3 => {self.fire_num = min(self.fire_num + 1, 9)}
+        match pow_id {
+            1 => self.speed = min(self.speed + 1, 9),
+            2 => self.bomb_num = min(self.bomb_num + 1, 9),
+            3 => self.fire_num = min(self.fire_num + 1, 9),
             _ => {}
         }
     }

@@ -4,12 +4,14 @@ const canvas = document.getElementById("canvas");
 const GRID_COLOR = "#CCCCCC";
 const ctx = canvas.getContext('2d');
 
-function resources(){
+function resources() {
     let res = {
         player: document.createElement('canvas'),
         bomb: document.createElement('canvas'),
         fire: document.createElement('canvas'),
-        wall: document.createElement('canvas')
+        wall: document.createElement('canvas'),
+        brock: document.createElement('canvas'),
+        pow: document.createElement('canvas')
     }
 
     //Player
@@ -24,11 +26,11 @@ function resources(){
     //     開始角度: 0度 (0 * Math.PI / 180), 
     //     終了角度: 360度 (360 * Math.PI / 180),  
     //     方向: true=反時計回りの円、false=時計回りの円);
-    plCtx.arc(16, 16, 16, 0 * Math.PI / 180, 360 * Math.PI / 180, false ) ;
+    plCtx.arc(16, 16, 16, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
     // 塗りつぶしの色    
-    plCtx.fillStyle = "rgba(200,200,200,0.8)" ;
+    plCtx.fillStyle = "rgba(200,200,200,0.8)";
     // 塗りつぶしを実行 
-    plCtx.fill() ;
+    plCtx.fill();
     // 線を描画を実行
     plCtx.stroke();
 
@@ -44,11 +46,11 @@ function resources(){
     //     開始角度: 0度 (0 * Math.PI / 180), 
     //     終了角度: 360度 (360 * Math.PI / 180),  
     //     方向: true=反時計回りの円、false=時計回りの円);
-    bmCtx.arc(16, 16, 16, 0 * Math.PI / 180, 360 * Math.PI / 180, false ) ;
+    bmCtx.arc(16, 16, 16, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
     // 塗りつぶしの色    
-    bmCtx.fillStyle = "rgba(30,30,90,0.8)" ;
+    bmCtx.fillStyle = "rgba(30,30,90,0.8)";
     // 塗りつぶしを実行 
-    bmCtx.fill() ;
+    bmCtx.fill();
     // 線を描画を実行
     bmCtx.stroke();
 
@@ -64,7 +66,7 @@ function resources(){
     //     開始角度: 0度 (0 * Math.PI / 180), 
     //     終了角度: 360度 (360 * Math.PI / 180),  
     //     方向: true=反時計回りの円、false=時計回りの円);
-    frCtx.arc(16, 16, 16, 0 * Math.PI / 180, 360 * Math.PI / 180, false ) ;
+    frCtx.arc(16, 16, 16, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
     // 塗りつぶしの色    
     frCtx.fillStyle = "rgba(200,30,30,0.8)";
     // 塗りつぶしを実行 
@@ -76,9 +78,37 @@ function resources(){
     res.wall.width = 32;
     res.wall.height = 32;
     let wallCtx = res.wall.getContext('2d');
-    wallCtx.fillStyle = "rgba(150,120,0,0.8)";
+    wallCtx.fillStyle = "rgba(30,60,200,0.8)";
     wallCtx.beginPath();
     wallCtx.fillRect(0, 0, res.wall.width, res.wall.height);
+
+    // Brock
+    res.brock.width = 32;
+    res.brock.height = 32;
+    let brockCtx = res.brock.getContext('2d');
+    brockCtx.fillStyle = "rgba(150,100,10,0.8)";
+    brockCtx.beginPath();
+    brockCtx.fillRect(0, 0, res.brock.width, res.brock.height);
+
+    // Pow
+    res.pow.width = 32;
+    res.pow.height = 32;
+    let powCtx = res.pow.getContext('2d');
+    powCtx.beginPath();
+    powCtx.strokeStyle = GRID_COLOR;
+    // arc(x座標, 
+    //     y座標,
+    //     半径, 
+    //     開始角度: 0度 (0 * Math.PI / 180), 
+    //     終了角度: 360度 (360 * Math.PI / 180),  
+    //     方向: true=反時計回りの円、false=時計回りの円);
+    powCtx.arc(16, 16, 13, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
+    // 塗りつぶしの色    
+    powCtx.fillStyle = "rgba(200,200,30,0.8)";
+    // 塗りつぶしを実行 
+    powCtx.fill();
+    // 線を描画を実行
+    powCtx.stroke();
 
     return res;
 }
@@ -106,30 +136,44 @@ export class Draw {
     }
 
     draw_player(x, y) {
-        ctx.translate(x-16, y-16);
+        ctx.translate(x - 16, y - 16);
         ctx.drawImage(res.player, 0, 0);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.fillStyle = "black";  
+        ctx.fillStyle = "black";
     }
 
     draw_bomb(x, y) {
-        ctx.translate(x-16, y-16);
+        ctx.translate(x - 16, y - 16);
         ctx.drawImage(res.bomb, 0, 0);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.fillStyle = "black";  
+        ctx.fillStyle = "black";
     }
 
     draw_fire(x, y) {
-        ctx.translate(x-16, y-16);
+        ctx.translate(x - 16, y - 16);
         ctx.drawImage(res.fire, 0, 0);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.fillStyle = "black";  
+        ctx.fillStyle = "black";
     }
 
     draw_wall(x, y) {
-        ctx.translate(x-16, y-16);
+        ctx.translate(x - 16, y - 16);
         ctx.drawImage(res.wall, 0, 0);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.fillStyle = "black";  
+        ctx.fillStyle = "black";
+    }
+
+    draw_brock(x, y) {
+        ctx.translate(x - 16, y - 16);
+        ctx.drawImage(res.brock, 0, 0);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.fillStyle = "black";
+    }
+
+    draw_pow(x, y) {
+        ctx.translate(x - 16, y - 16);
+        ctx.drawImage(res.pow, 0, 0);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.fillStyle = "black";
     }
 }

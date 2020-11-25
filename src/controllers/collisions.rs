@@ -60,8 +60,18 @@ impl CollisionController {
     }
 
     pub fn player_to_fire(pos1: &Point, pos2: &Point) -> bool {
-        if pos2.x - 16 < pos1.x && pos1.x < pos2.x + 16 {
-            if pos2.y - 16 < pos1.y && pos1.y < pos2.y + 16 {
+        let RAD = 20;
+        if pos2.x - RAD < pos1.x && pos1.x < pos2.x + RAD {
+            if pos2.y - RAD < pos1.y && pos1.y < pos2.y + RAD {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    pub fn player_to_bomb(pos1: &Point, pos2: &Point) -> bool {
+        if pos2.x - 32 < pos1.x && pos1.x < pos2.x + 32 {
+            if pos2.y - 32 < pos1.y && pos1.y < pos2.y + 32 {
                 return true;
             }
         }
