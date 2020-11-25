@@ -73,11 +73,59 @@
 /******/ 					"__wbg_drawplayer_dee16ece3b3e7c80": function(p0i32,p1i32,p2i32) {
 /******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_drawplayer_dee16ece3b3e7c80"](p0i32,p1i32,p2i32);
 /******/ 					},
+/******/ 					"__wbg_drawpow_6dabf59ec0fddcd2": function(p0i32,p1i32,p2i32) {
+/******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_drawpow_6dabf59ec0fddcd2"](p0i32,p1i32,p2i32);
+/******/ 					},
 /******/ 					"__wbg_drawwall_2029b332d30ac9bf": function(p0i32,p1i32,p2i32) {
 /******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_drawwall_2029b332d30ac9bf"](p0i32,p1i32,p2i32);
 /******/ 					},
+/******/ 					"__wbg_drawbrock_6e08af3b4970d29f": function(p0i32,p1i32,p2i32) {
+/******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_drawbrock_6e08af3b4970d29f"](p0i32,p1i32,p2i32);
+/******/ 					},
 /******/ 					"__wbg_drawbomb_2fe6921708c2eb92": function(p0i32,p1i32,p2i32) {
 /******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_drawbomb_2fe6921708c2eb92"](p0i32,p1i32,p2i32);
+/******/ 					},
+/******/ 					"__wbg_drawfire_1f2e8190e36c1fff": function(p0i32,p1i32,p2i32) {
+/******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_drawfire_1f2e8190e36c1fff"](p0i32,p1i32,p2i32);
+/******/ 					},
+/******/ 					"__wbg_new_59cb74e423758ede": function() {
+/******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_new_59cb74e423758ede"]();
+/******/ 					},
+/******/ 					"__wbg_stack_558ba5917b466edd": function(p0i32,p1i32) {
+/******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_stack_558ba5917b466edd"](p0i32,p1i32);
+/******/ 					},
+/******/ 					"__wbg_error_4bb6c2a97407129a": function(p0i32,p1i32) {
+/******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_error_4bb6c2a97407129a"](p0i32,p1i32);
+/******/ 					},
+/******/ 					"__wbg_new_3a746f2619705add": function(p0i32,p1i32) {
+/******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_new_3a746f2619705add"](p0i32,p1i32);
+/******/ 					},
+/******/ 					"__wbg_call_f54d3a6dadb199ca": function(p0i32,p1i32) {
+/******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_call_f54d3a6dadb199ca"](p0i32,p1i32);
+/******/ 					},
+/******/ 					"__wbindgen_jsval_eq": function(p0i32,p1i32) {
+/******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbindgen_jsval_eq"](p0i32,p1i32);
+/******/ 					},
+/******/ 					"__wbg_self_ac379e780a0d8b94": function(p0i32) {
+/******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_self_ac379e780a0d8b94"](p0i32);
+/******/ 					},
+/******/ 					"__wbg_crypto_1e4302b85d4f64a2": function(p0i32) {
+/******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_crypto_1e4302b85d4f64a2"](p0i32);
+/******/ 					},
+/******/ 					"__wbindgen_is_undefined": function(p0i32) {
+/******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbindgen_is_undefined"](p0i32);
+/******/ 					},
+/******/ 					"__wbg_getRandomValues_1b4ba144162a5c9e": function(p0i32) {
+/******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_getRandomValues_1b4ba144162a5c9e"](p0i32);
+/******/ 					},
+/******/ 					"__wbg_require_6461b1e9a0d7c34a": function(p0i32,p1i32) {
+/******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_require_6461b1e9a0d7c34a"](p0i32,p1i32);
+/******/ 					},
+/******/ 					"__wbg_getRandomValues_1ef11e888e5228e9": function(p0i32,p1i32,p2i32) {
+/******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_getRandomValues_1ef11e888e5228e9"](p0i32,p1i32,p2i32);
+/******/ 					},
+/******/ 					"__wbg_randomFillSync_1b52c8482374c55b": function(p0i32,p1i32,p2i32) {
+/******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_randomFillSync_1b52c8482374c55b"](p0i32,p1i32,p2i32);
 /******/ 					},
 /******/ 					"__wbindgen_throw": function(p0i32,p1i32) {
 /******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbindgen_throw"](p0i32,p1i32);
@@ -183,7 +231,7 @@
 /******/ 				promises.push(installedWasmModuleData);
 /******/ 			else {
 /******/ 				var importObject = wasmImportObjects[wasmModuleId]();
-/******/ 				var req = fetch(__webpack_require__.p + "" + {"../pkg/bomberhuman_bg.wasm":"a59b04fcf2af9e50c8df"}[wasmModuleId] + ".module.wasm");
+/******/ 				var req = fetch(__webpack_require__.p + "" + {"../pkg/bomberhuman_bg.wasm":"7dd421cf3c45c42b9c31"}[wasmModuleId] + ".module.wasm");
 /******/ 				var promise;
 /******/ 				if(importObject instanceof Promise && typeof WebAssembly.compileStreaming === 'function') {
 /******/ 					promise = Promise.all([WebAssembly.compileStreaming(req), importObject]).then(function(items) {
