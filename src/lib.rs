@@ -37,8 +37,8 @@ impl GameData {
     pub fn new() -> GameData {
         init_panic_hook();
         let draw = Draw::new();
-        let width = draw.width(512);
-        let height = draw.height(512);
+        let width = draw.width(672);
+        let height = draw.height(448);
         GameData {
             state: GameState::new(),
         }
@@ -129,11 +129,11 @@ impl GameData {
                     self.state.world.obj[i] = 2;
                     self.state.world.brock.push(Brock::new(obj_pos));
                     let mut pow_type: i32 = 0;
-                    let random_num: i32 = rng.gen();
-                    match random_num % 3 {
-                        0 => pow_type = 1,
-                        1 => pow_type = 2,
-                        2 => pow_type = 3,
+                    let random_num: i32 = rng.gen_range(0, 3);
+                    match random_num {
+                        0 => pow_type = 0,
+                        1 => pow_type = 1,
+                        2 => pow_type = 2,
                         _ => pow_type = 0,
                     }
                     self.state.world.pow.push(Pow::new(obj_pos, pow_type));
@@ -167,14 +167,36 @@ impl GameData {
 
         draw.clear_screen();
 
-        for player in &self.state.world.player {
+        for player in &mut self.state.world.player {
+            if utils::is_eq_pos(player.pos, player.pre_pos) {
+                player.is_animation = false;
+            } else {
+                player.is_animation = true;
+            }
+
+            if player.is_animation {
+                player.next_spr += player.speed;
+                if player.next_spr > 10 {
+                    player.spr_idx = (player.spr_idx + 1) % 6;
+                    player.next_spr = 0;
+                }
+            } else {
+                player.spr_idx = 0;
+                player.next_spr = 0;
+            }
             if player.is_alive {
-                draw.draw_player(player.x(), player.y());
+                draw.draw_player(
+                    player.x(),
+                    player.y(),
+                    player.spr_idx,
+                    player.spr_rev,
+                    player.id,
+                );
             }
         }
 
         for pow in &self.state.world.pow {
-            draw.draw_pow(pow.x(), pow.y());
+            draw.draw_pow(pow.x(), pow.y(), pow.id);
         }
 
         for (i, obj_num) in self.state.world.obj.iter().enumerate() {
@@ -187,18 +209,20 @@ impl GameData {
             let obj_point = utils::idx_to_pos(i);
             match obj_num {
                 1 => draw.draw_wall(obj_point.x, obj_point.y),
-                2 => draw.draw_brock(obj_point.x, obj_point.y),
-                5 => draw.draw_brock(obj_point.x, obj_point.y),
                 _ => (),
             }
         }
 
+        for brock in &self.state.world.brock {
+            draw.draw_brock(brock.x(), brock.y(), brock.spr_idx);
+        }
+
         for bomb in &self.state.world.bomb {
-            draw.draw_bomb(bomb.x(), bomb.y());
+            draw.draw_bomb(bomb.x(), bomb.y(), bomb.spr_idx);
         }
 
         for fire in &self.state.world.fire {
-            draw.draw_fire(fire.x(), fire.y());
+            draw.draw_fire(fire.x(), fire.y(), fire.spr_idx);
         }
     }
 }
@@ -220,20 +244,20 @@ extern "C" {
     pub fn clear_screen(this: &Draw);
 
     #[wasm_bindgen(method)]
-    pub fn draw_player(this: &Draw, _: c_int, _: c_int);
+    pub fn draw_player(this: &Draw, _: c_int, _: c_int, _: c_int, _: c_int, _: c_int);
 
     #[wasm_bindgen(method)]
-    pub fn draw_bomb(this: &Draw, _: c_int, _: c_int);
+    pub fn draw_bomb(this: &Draw, _: c_int, _: c_int, _: c_int);
 
     #[wasm_bindgen(method)]
-    pub fn draw_fire(this: &Draw, _: c_int, _: c_int);
+    pub fn draw_fire(this: &Draw, _: c_int, _: c_int, _: c_int);
 
     #[wasm_bindgen(method)]
     pub fn draw_wall(this: &Draw, _: c_int, _: c_int);
 
     #[wasm_bindgen(method)]
-    pub fn draw_brock(this: &Draw, _: c_int, _: c_int);
+    pub fn draw_brock(this: &Draw, _: c_int, _: c_int, _: c_int);
 
     #[wasm_bindgen(method)]
-    pub fn draw_pow(this: &Draw, _: c_int, _: c_int);
+    pub fn draw_pow(this: &Draw, _: c_int, _: c_int, _: c_int);
 }

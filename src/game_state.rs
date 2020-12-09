@@ -47,6 +47,7 @@ impl GameState {
     pub fn update(&mut self) {
         //Player Vec をループ:player を　update
         for player in &mut self.world.player {
+            player.pre_pos = player.pos;
             player.update(self.world.keys[player.id as usize]);
         }
 
@@ -97,7 +98,7 @@ impl GameState {
                 self.world.fire.push(Fire::new(
                     bomb.position(),
                     20,
-                    18,
+                    18, //base_ttl
                     self.world.player[bomb.player_idx as usize].fire_num,
                     0,
                 ));
@@ -206,6 +207,16 @@ impl GameState {
 
         //寿命が0になった fire の削除
         self.world.fire.retain(|x| x.is_alive());
+
+        //fireのcollision
+        for fire in &mut self.world.fire {
+            for pow in &mut self.world.pow {
+                if utils::is_eq_pos(fire.pos, pow.pos) {
+                    fire.ttl = 0;
+                    pow.ttl = 0;
+                }
+            }
+        }
 
         //寿命が0になった pow の削除
         self.world.pow.retain(|x| x.is_alive());

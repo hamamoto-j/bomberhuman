@@ -7,109 +7,58 @@ const ctx = canvas.getContext('2d');
 function resources() {
     let res = {
         player: document.createElement('img'),
-        bomb: document.createElement('canvas'),
-        fire: document.createElement('canvas'),
-        wall: document.createElement('canvas'),
-        brock: document.createElement('canvas'),
-        pow: document.createElement('canvas')
+        bomb: document.createElement('img'),
+        fire: document.createElement('img'),
+        wall: document.createElement('img'),
+        brock: document.createElement('img'),
+        pow: document.createElement('img')
     }
 
     //Player
     res.player.width = 32;
     res.player.height = 32;
     res.player.src = "image/player.png";
-//    let plCtx = res.player.getContext('2d');
-//    plCtx.beginPath();
-//    plCtx.strokeStyle = GRID_COLOR;
+    //    let plCtx = res.player.getContext('2d');
+    //    plCtx.beginPath();
+    //    plCtx.strokeStyle = GRID_COLOR;
     // arc(x座標, 
     //     y座標,
     //     半径, 
     //     開始角度: 0度 (0 * Math.PI / 180), 
     //     終了角度: 360度 (360 * Math.PI / 180),  
     //     方向: true=反時計回りの円、false=時計回りの円);
-//    plCtx.arc(16, 16, 16, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
+    //    plCtx.arc(16, 16, 16, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
     // 塗りつぶしの色    
-//    plCtx.fillStyle = "rgba(200,200,200,0.8)";
+    //    plCtx.fillStyle = "rgba(200,200,200,0.8)";
     // 塗りつぶしを実行 
-//    plCtx.fill();
+    //    plCtx.fill();
     // 線を描画を実行
-//    plCtx.stroke();
+    //    plCtx.stroke();
 
     //Bomb
     res.bomb.width = 32;
     res.bomb.height = 32;
-    let bmCtx = res.bomb.getContext('2d');
-    bmCtx.beginPath();
-    bmCtx.strokeStyle = GRID_COLOR;
-    // arc(x座標, 
-    //     y座標,
-    //     半径, 
-    //     開始角度: 0度 (0 * Math.PI / 180), 
-    //     終了角度: 360度 (360 * Math.PI / 180),  
-    //     方向: true=反時計回りの円、false=時計回りの円);
-    bmCtx.arc(16, 16, 16, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
-    // 塗りつぶしの色    
-    bmCtx.fillStyle = "rgba(30,30,90,0.8)";
-    // 塗りつぶしを実行 
-    bmCtx.fill();
-    // 線を描画を実行
-    bmCtx.stroke();
+    res.bomb.src = "image/bomb.png";
 
     //Fire
     res.fire.width = 32;
     res.fire.height = 32;
-    let frCtx = res.fire.getContext('2d');
-    frCtx.beginPath();
-    frCtx.strokeStyle = GRID_COLOR;
-    // arc(x座標, 
-    //     y座標,
-    //     半径, 
-    //     開始角度: 0度 (0 * Math.PI / 180), 
-    //     終了角度: 360度 (360 * Math.PI / 180),  
-    //     方向: true=反時計回りの円、false=時計回りの円);
-    frCtx.arc(16, 16, 16, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
-    // 塗りつぶしの色    
-    frCtx.fillStyle = "rgba(200,30,30,0.8)";
-    // 塗りつぶしを実行 
-    frCtx.fill();
-    // 線を描画を実行
-    frCtx.stroke();
+    res.fire.src = "image/fire.png";
 
     // Wall
     res.wall.width = 32;
     res.wall.height = 32;
-    let wallCtx = res.wall.getContext('2d');
-    wallCtx.fillStyle = "rgba(30,60,200,0.8)";
-    wallCtx.beginPath();
-    wallCtx.fillRect(0, 0, res.wall.width, res.wall.height);
+    res.wall.src = "image/wall.png";
 
     // Brock
     res.brock.width = 32;
     res.brock.height = 32;
-    let brockCtx = res.brock.getContext('2d');
-    brockCtx.fillStyle = "rgba(150,100,10,0.8)";
-    brockCtx.beginPath();
-    brockCtx.fillRect(0, 0, res.brock.width, res.brock.height);
+    res.brock.src = "image/brock.png";
 
     // Pow
     res.pow.width = 32;
     res.pow.height = 32;
-    let powCtx = res.pow.getContext('2d');
-    powCtx.beginPath();
-    powCtx.strokeStyle = GRID_COLOR;
-    // arc(x座標, 
-    //     y座標,
-    //     半径, 
-    //     開始角度: 0度 (0 * Math.PI / 180), 
-    //     終了角度: 360度 (360 * Math.PI / 180),  
-    //     方向: true=反時計回りの円、false=時計回りの円);
-    powCtx.arc(16, 16, 13, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
-    // 塗りつぶしの色    
-    powCtx.fillStyle = "rgba(200,200,30,0.8)";
-    // 塗りつぶしを実行 
-    powCtx.fill();
-    // 線を描画を実行
-    powCtx.stroke();
+    res.pow.src = "image/pow.png";
 
     return res;
 }
@@ -132,48 +81,50 @@ export class Draw {
     }
 
     clear_screen() {
-        ctx.fillStyle = "black";
+        ctx.fillStyle = "green";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    draw_player(x, y) {
-        ctx.translate(x - 16, y - 16);
-        ctx.drawImage(res.player, 0, 0, 640, 640, 0, 0, 32, 32);
+    draw_player(x, y, idx, reverse, id) {
+        ctx.translate(x - 16 + 32 * reverse, y - 16);
+        ctx.scale(1 - 2 * reverse, 1);
+        ctx.drawImage(res.player, 0 + idx * 32, 0 + 32 * id, 32, 32, 0, 0, 32, 32);
+        //drawImage(画像ソース, x_start, y_start, x_end, y_end, 0, 0, 32, 32)
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.fillStyle = "black";
     }
 
-    draw_bomb(x, y) {
+    draw_bomb(x, y, idx) {
         ctx.translate(x - 16, y - 16);
-        ctx.drawImage(res.bomb, 0, 0);
+        ctx.drawImage(res.bomb, 0 + 32 * idx, 0, 32, 32, 0, 0, 32, 32);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.fillStyle = "black";
     }
 
-    draw_fire(x, y) {
+    draw_fire(x, y, idx) {
         ctx.translate(x - 16, y - 16);
-        ctx.drawImage(res.fire, 0, 0);
+        ctx.drawImage(res.fire, 0 + 32 * idx, 0, 32, 32, 0, 0, 32, 32);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.fillStyle = "black";
     }
 
     draw_wall(x, y) {
         ctx.translate(x - 16, y - 16);
-        ctx.drawImage(res.wall, 0, 0);
+        ctx.drawImage(res.wall, 0, 0, 32, 32, 0, 0, 32, 32);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.fillStyle = "black";
     }
 
-    draw_brock(x, y) {
+    draw_brock(x, y, idx) {
         ctx.translate(x - 16, y - 16);
-        ctx.drawImage(res.brock, 0, 0);
+        ctx.drawImage(res.brock, 0 + 32 * idx, 0, 32, 32, 0, 0, 32, 32);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.fillStyle = "black";
     }
 
-    draw_pow(x, y) {
+    draw_pow(x, y, id) {
         ctx.translate(x - 16, y - 16);
-        ctx.drawImage(res.pow, 0, 0);
+        ctx.drawImage(res.pow, 0 + 32 * id, 0, 32, 32, 0, 0, 32, 32);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.fillStyle = "black";
     }
