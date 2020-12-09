@@ -306,6 +306,8 @@ impl GameState {
                 }
             }
         }
+
+        self.world.timer.update();
     }
 
     pub fn width(&self) -> i32 {

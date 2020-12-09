@@ -224,6 +224,9 @@ impl GameData {
         for fire in &self.state.world.fire {
             draw.draw_fire(fire.x(), fire.y(), fire.spr_idx);
         }
+
+        //draw.draw_timer(180);
+        draw.draw_timer(self.state.world.timer.left());
     }
 }
 
@@ -260,4 +263,7 @@ extern "C" {
 
     #[wasm_bindgen(method)]
     pub fn draw_pow(this: &Draw, _: c_int, _: c_int, _: c_int);
+
+    #[wasm_bindgen(method)]
+    pub fn draw_timer(this: &Draw, _: c_int);
 }

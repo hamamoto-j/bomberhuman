@@ -11,29 +11,13 @@ function resources() {
         fire: document.createElement('img'),
         wall: document.createElement('img'),
         brock: document.createElement('img'),
-        pow: document.createElement('img')
+        pow: document.createElement('img'),
     }
 
     //Player
     res.player.width = 32;
     res.player.height = 32;
     res.player.src = "image/player.png";
-    //    let plCtx = res.player.getContext('2d');
-    //    plCtx.beginPath();
-    //    plCtx.strokeStyle = GRID_COLOR;
-    // arc(x座標, 
-    //     y座標,
-    //     半径, 
-    //     開始角度: 0度 (0 * Math.PI / 180), 
-    //     終了角度: 360度 (360 * Math.PI / 180),  
-    //     方向: true=反時計回りの円、false=時計回りの円);
-    //    plCtx.arc(16, 16, 16, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
-    // 塗りつぶしの色    
-    //    plCtx.fillStyle = "rgba(200,200,200,0.8)";
-    // 塗りつぶしを実行 
-    //    plCtx.fill();
-    // 線を描画を実行
-    //    plCtx.stroke();
 
     //Bomb
     res.bomb.width = 32;
@@ -127,5 +111,12 @@ export class Draw {
         ctx.drawImage(res.pow, 0 + 32 * id, 0, 32, 32, 0, 0, 32, 32);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.fillStyle = "black";
+    }
+
+    draw_timer(second) {
+        ctx.fillStyle = "black";
+        ctx.font = "16px serif";
+        ctx.textAlign = "left";
+        ctx.fillText("残り時間 " + second , 550, 100, 200);
     }
 }

@@ -6,6 +6,7 @@ use crate::models::Bomb;
 use crate::models::Brock;
 use crate::models::Fire;
 use crate::models::Pow;
+use crate::models::Timer;
 
 pub struct World {
     pub player: Vec<Player>,
@@ -15,6 +16,7 @@ pub struct World {
     pub pow: Vec<Pow>,
     pub obj: Vec<u32>,
     pub keys: Vec<Keys>,
+    pub timer: Timer,
     pub width: i32,
     pub height: i32,
 }
@@ -61,6 +63,7 @@ impl World {
                 */
             ],
             keys: Vec::new(),
+            timer: Timer::new(),
             width: 2000,
             height: 2000,
         }
