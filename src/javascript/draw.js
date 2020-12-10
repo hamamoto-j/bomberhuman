@@ -14,6 +14,7 @@ function resources() {
         pow: document.createElement('img'),
         powup: document.createElement('img'),
         particle: document.createElement('img'),
+        shadow: document.createElement('canvas'),
     }
 
     //Player
@@ -56,6 +57,22 @@ function resources() {
     res.particle.height = 32;
     res.particle.src = "image/particle.png";
 
+    // Shadow
+    res.shadow.width = 32;
+    res.shadow.height = 32;
+    let shCtx = res.shadow.getContext('2d');
+    // arc(x座標, 
+    //     y座標,
+    //     半径, 
+    //     開始角度: 0度 (0 * Math.PI / 180), 
+    //     終了角度: 360度 (360 * Math.PI / 180),  
+    //     方向: true=反時計回りの円、false=時計回りの円);
+    shCtx.arc(16, 16, 15, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
+    // 塗りつぶしの色    
+    shCtx.fillStyle = "rgba(80,80,120,0.6)";
+    // 塗りつぶしを実行 
+    shCtx.fill();
+
     return res;
 }
 
@@ -82,6 +99,7 @@ export class Draw {
     }
 
     draw_player(x, y, idx, reverse, id) {
+        this.draw_shadow(x, y);
         ctx.translate(x - 16 + 32 * reverse, y - 16);
         ctx.scale(1 - 2 * reverse, 1);
         ctx.drawImage(res.player, 0 + idx * 32, 0 + 32 * id, 32, 32, 0, 0, 32, 32);
@@ -91,6 +109,7 @@ export class Draw {
     }
 
     draw_bomb(x, y, idx) {
+        this.draw_shadow(x, y);
         ctx.translate(x - 16, y - 16);
         ctx.drawImage(res.bomb, 0 + 32 * idx, 0, 32, 32, 0, 0, 32, 32);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -119,6 +138,7 @@ export class Draw {
     }
 
     draw_pow(x, y, id) {
+        this.draw_shadow(x, y);
         ctx.translate(x - 16, y - 16);
         ctx.drawImage(res.pow, 0 + 32 * id, 0, 32, 32, 0, 0, 32, 32);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -135,6 +155,14 @@ export class Draw {
     draw_particle(x, y, id) {
         ctx.translate(x - 16, y - 16);
         ctx.drawImage(res.particle, 0 + 32 * id, 0, 32, 32, 0, 0, 32, 32);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.fillStyle = "black";
+    }
+
+    draw_shadow(x, y) {
+        ctx.translate(x - 16, y + 12);
+        ctx.scale(1, 0.2);
+        ctx.drawImage(res.shadow, 0, 0);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.fillStyle = "black";
     }

@@ -203,6 +203,10 @@ impl GameData {
             draw.draw_pow(pow.x(), pow.y(), pow.id);
         }
 
+        for bomb in &self.state.world.bomb {
+            draw.draw_bomb(bomb.x(), bomb.y(), bomb.spr_idx);
+        }
+
         for (i, obj_num) in self.state.world.obj.iter().enumerate() {
             //     Non = 0,
             //     Wall = 1,
@@ -219,10 +223,6 @@ impl GameData {
 
         for brock in &self.state.world.brock {
             draw.draw_brock(brock.x(), brock.y(), brock.spr_idx);
-        }
-
-        for bomb in &self.state.world.bomb {
-            draw.draw_bomb(bomb.x(), bomb.y(), bomb.spr_idx);
         }
 
         for fire in &self.state.world.fire {
