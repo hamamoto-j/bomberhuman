@@ -2,10 +2,15 @@ use crate::controllers::CollisionController;
 use crate::geometry::Point;
 use crate::models::Bomb;
 use crate::models::Fire;
+use crate::models::Particle;
 use crate::models::Player;
+use crate::models::Powup;
 use crate::models::World;
 
+use wasm_bindgen::prelude::*;
+
 use crate::utils;
+use rand::Rng;
 
 pub struct GameState {
     pub world: World,
@@ -40,6 +45,17 @@ impl GameState {
             "l" => self.world.keys[3].arrow_right = b,
             "j" => self.world.keys[3].arrow_left = b,
             "u" => self.world.keys[3].space = b,
+            _ => (),
+        }
+    }
+
+    pub fn gp_action(&mut self, gp_id: usize, s: &str, b: bool) {
+        match s {
+            "Up" => self.world.keys[gp_id].arrow_up = b,
+            "Down" => self.world.keys[gp_id].arrow_down = b,
+            "Right" => self.world.keys[gp_id].arrow_right = b,
+            "Left" => self.world.keys[gp_id].arrow_left = b,
+            "Button1" => self.world.keys[gp_id].space = b,
             _ => (),
         }
     }
@@ -81,6 +97,7 @@ impl GameState {
                             p_list,
                         ));
                         player.bomb_num -= 1;
+                        play_audio("put");
                     }
                     _ => (),
                 }
@@ -104,6 +121,8 @@ impl GameState {
                 ));
                 // --> Fire::new(position, base_ttl, spread_t, child, direction)
                 self.world.player[bomb.player_idx as usize].bomb_num += 1;
+                play_audio("explosion");
+                play_audio("fire");
             }
         }
 
@@ -199,6 +218,16 @@ impl GameState {
             }
         }
 
+        //powupの更新
+        for powup in &mut self.world.powup {
+            powup.update();
+        }
+
+        //particleの更新
+        for particle in &mut self.world.particle {
+            particle.update();
+        }
+
         //寿命が0になった brock の削除
         self.world.brock.retain(|x| x.is_alive());
 
@@ -212,7 +241,7 @@ impl GameState {
         for fire in &mut self.world.fire {
             for pow in &mut self.world.pow {
                 if utils::is_eq_pos(fire.pos, pow.pos) {
-                    fire.ttl = 0;
+                    fire.child = 0;
                     pow.ttl = 0;
                 }
             }
@@ -220,6 +249,12 @@ impl GameState {
 
         //寿命が0になった pow の削除
         self.world.pow.retain(|x| x.is_alive());
+
+        //寿命が0になった powup の削除
+        self.world.powup.retain(|x| x.is_alive());
+
+        //寿命が0になった powup の削除
+        self.world.particle.retain(|x| x.is_alive());
 
         //各プレイヤーの衝突判定
         for player in &mut self.world.player {
@@ -279,6 +314,8 @@ impl GameState {
             for fire in &self.world.fire {
                 if CollisionController::player_to_fire(&player.pos, &fire.pos) {
                     player.is_alive = false;
+                    self.world.particle.push(Particle::new(player.pos));
+                    play_audio("down");
                 }
             }
 
@@ -300,13 +337,23 @@ impl GameState {
             }
 
             for pow in &mut self.world.pow {
-                if CollisionController::player_to_bomb(&player.pos, &pow.pos) {
+                if CollisionController::player_to_pow(&player.pos, &pow.pos) {
+                    let mut rng = rand::thread_rng();
                     pow.ttl = 0;
                     player.pow_up(pow.id);
+                    for i in 0..6 {
+                        //アイテム取得時のパーティクルの生成
+                        let rand_x: i32 = rng.gen_range(-16, 16);
+                        let rand_y: i32 = rng.gen_range(-16, 16);
+                        let point: Point = Point::new(pow.x() + rand_x, pow.y() + rand_y);
+                        self.world.powup.push(Powup::new(point, pow.id));
+                    }
+                    play_audio("get");
                 }
             }
         }
 
+        //timer の更新
         self.world.timer.update();
     }
 
@@ -317,4 +364,9 @@ impl GameState {
     pub fn height(&self) -> i32 {
         self.world.height
     }
+}
+
+#[wasm_bindgen(module = "/src/javascript/audio.js")]
+extern "C" {
+    pub fn play_audio(s: &str);
 }

@@ -154,6 +154,10 @@ impl GameData {
         self.state.action(s, b);
     }
 
+    pub fn gp_action(&mut self, gp_id: usize, s: &str, b: bool) {
+        self.state.gp_action(gp_id, s, b);
+    }
+
     pub fn width(&self) -> i32 {
         self.state.width()
     }
@@ -225,7 +229,14 @@ impl GameData {
             draw.draw_fire(fire.x(), fire.y(), fire.spr_idx);
         }
 
-        //draw.draw_timer(180);
+        for powup in &self.state.world.powup {
+            draw.draw_powup(powup.x(), powup.y(), powup.spr_idx, powup.types);
+        }
+
+        for particle in &self.state.world.particle {
+            draw.draw_particle(particle.x(), particle.y(), particle.spr_idx);
+        }
+
         draw.draw_timer(self.state.world.timer.left());
     }
 }
@@ -263,6 +274,12 @@ extern "C" {
 
     #[wasm_bindgen(method)]
     pub fn draw_pow(this: &Draw, _: c_int, _: c_int, _: c_int);
+
+    #[wasm_bindgen(method)]
+    pub fn draw_powup(this: &Draw, _: c_int, _: c_int, _: c_int, _: c_int);
+
+    #[wasm_bindgen(method)]
+    pub fn draw_particle(this: &Draw, _: c_int, _: c_int, _: c_int);
 
     #[wasm_bindgen(method)]
     pub fn draw_timer(this: &Draw, _: c_int);

@@ -1,11 +1,12 @@
 use crate::models::Player;
 // use crate::models::Wall;
 use crate::controllers::Keys;
-use crate::geometry::Point;
 use crate::models::Bomb;
 use crate::models::Brock;
 use crate::models::Fire;
+use crate::models::Particle;
 use crate::models::Pow;
+use crate::models::Powup;
 use crate::models::Timer;
 
 pub struct World {
@@ -19,6 +20,8 @@ pub struct World {
     pub timer: Timer,
     pub width: i32,
     pub height: i32,
+    pub powup: Vec<Powup>,
+    pub particle: Vec<Particle>,
 }
 
 impl World {
@@ -66,6 +69,8 @@ impl World {
             timer: Timer::new(),
             width: 2000,
             height: 2000,
+            powup: Vec::new(),
+            particle: Vec::new(),
         }
     }
 }

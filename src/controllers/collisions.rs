@@ -77,4 +77,13 @@ impl CollisionController {
         }
         return false;
     }
+
+    pub fn player_to_pow(pos1: &Point, pos2: &Point) -> bool {
+        if pos2.x - 28 < pos1.x && pos1.x < pos2.x + 28 {
+            if pos2.y - 28 < pos1.y && pos1.y < pos2.y + 28 {
+                return true;
+            }
+        }
+        return false;
+    }
 }

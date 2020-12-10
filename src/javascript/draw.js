@@ -12,6 +12,8 @@ function resources() {
         wall: document.createElement('img'),
         brock: document.createElement('img'),
         pow: document.createElement('img'),
+        powup: document.createElement('img'),
+        particle: document.createElement('img'),
     }
 
     //Player
@@ -43,6 +45,16 @@ function resources() {
     res.pow.width = 32;
     res.pow.height = 32;
     res.pow.src = "image/pow.png";
+
+    // Powup
+    res.powup.width = 32;
+    res.powup.height = 32;
+    res.powup.src = "image/powup.png";
+
+    // Particle
+    res.particle.width = 32;
+    res.particle.height = 32;
+    res.particle.src = "image/particle.png";
 
     return res;
 }
@@ -113,10 +125,24 @@ export class Draw {
         ctx.fillStyle = "black";
     }
 
+    draw_powup(x, y, id, type) {
+        ctx.translate(x - 16, y - 16);
+        ctx.drawImage(res.powup, 0 + 32 * id, 0 + 32 * type, 32, 32, 0, 0, 32, 32);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.fillStyle = "black";
+    }
+
+    draw_particle(x, y, id) {
+        ctx.translate(x - 16, y - 16);
+        ctx.drawImage(res.particle, 0 + 32 * id, 0, 32, 32, 0, 0, 32, 32);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.fillStyle = "black";
+    }
+
     draw_timer(second) {
         ctx.fillStyle = "black";
         ctx.font = "16px serif";
         ctx.textAlign = "left";
-        ctx.fillText("残り時間 " + second , 550, 100, 200);
+        ctx.fillText("残り時間 " + second, 550, 100, 200);
     }
 }

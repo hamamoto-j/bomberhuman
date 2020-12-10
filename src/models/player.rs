@@ -24,7 +24,7 @@ impl Player {
         Player {
             pos: pos,
             pre_pos: pos,
-            speed: 2,
+            speed: 1,
             bomb_num: 1,
             fire_num: 1,
             put_bomb: false,
@@ -64,7 +64,7 @@ impl Player {
 
     pub fn pow_up(&mut self, pow_id: i32) {
         match pow_id {
-            0 => self.speed = min(self.speed + 1, 9),
+            0 => self.speed = min(self.speed + 1, 6),
             1 => self.bomb_num = min(self.bomb_num + 1, 9),
             2 => self.fire_num = min(self.fire_num + 1, 9),
             _ => {}
