@@ -312,10 +312,12 @@ impl GameState {
             }
 
             for fire in &self.world.fire {
-                if CollisionController::player_to_fire(&player.pos, &fire.pos) {
-                    player.is_alive = false;
-                    self.world.particle.push(Particle::new(player.pos));
-                    play_audio("down");
+                if player.immune == false {
+                    if CollisionController::player_to_fire(&player.pos, &fire.pos) {
+                        player.is_alive = false;
+                        self.world.particle.push(Particle::new(player.pos));
+                        play_audio("down");
+                    }
                 }
             }
 
@@ -355,6 +357,26 @@ impl GameState {
 
         //timer の更新
         self.world.timer.update();
+    }
+
+    pub fn live_player_num(&self) -> i32 {
+        let mut i: i32 = 0;
+        for player in &self.world.player {
+            if player.is_alive == true {
+                i += 1;
+            }
+        }
+        i
+    }
+
+    pub fn live_player_id(&self) -> i32 {
+        let mut i: i32 = 0;
+        for player in &self.world.player {
+            if player.is_alive == true {
+                i = player.id;
+            }
+        }
+        i
     }
 
     pub fn width(&self) -> i32 {

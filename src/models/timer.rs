@@ -2,8 +2,9 @@ use std::time::Instant;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Timer {
-    left_time: i32,
+    pub left_time: i32,
     count_time: i32,
+    pub is_work: bool,
 }
 
 impl Timer {
@@ -11,6 +12,7 @@ impl Timer {
         Timer {
             left_time: 180,
             count_time: 60,
+            is_work: true,
         }
     }
 
@@ -24,10 +26,12 @@ impl Timer {
     //   }
 
     pub fn update(&mut self) {
-        self.count_time -= 1;
-        if self.count_time < 0 {
-            self.left_time -= 1;
-            self.count_time = 60;
+        if self.is_work {
+            self.count_time -= 1;
+            if self.count_time < 0 {
+                self.left_time -= 1;
+                self.count_time = 60;
+            }
         }
     }
 

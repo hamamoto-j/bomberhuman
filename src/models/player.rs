@@ -17,6 +17,7 @@ pub struct Player {
     pub next_spr: i32,
     pub spr_idx: i32,
     pub spr_rev: i32,
+    pub immune: bool,
 }
 
 impl Player {
@@ -34,6 +35,7 @@ impl Player {
             spr_idx: 0,
             next_spr: 0,
             spr_rev: 0,
+            immune: false,
         }
     }
 
@@ -90,5 +92,9 @@ impl Player {
     pub fn move_to(&mut self, move_point: Point) {
         self.pos.x = move_point.x;
         self.pos.y = move_point.y;
+    }
+
+    pub fn be_immune(&mut self) {
+        self.immune = true;
     }
 }

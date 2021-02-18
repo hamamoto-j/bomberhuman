@@ -147,7 +147,15 @@ impl GameData {
     }
 
     pub fn update(&mut self) {
-        self.state.update();
+        if 0 < self.state.world.timer.left() && 1 <= self.state.live_player_num() {
+            self.state.update();
+        } else {
+        }
+        if self.state.live_player_num() == 1 {
+            let id: usize = self.state.live_player_id() as usize;
+            self.state.world.player[id].be_immune();
+            self.state.world.timer.is_work = false;
+        }
     }
 
     pub fn action(&mut self, s: &str, b: bool) {
@@ -238,6 +246,16 @@ impl GameData {
         }
 
         draw.draw_timer(self.state.world.timer.left());
+
+        if self.state.world.timer.left() <= 0 {
+            draw.draw_timeup();
+        }
+        if self.state.live_player_num() == 1 {
+            draw.draw_winner(self.state.live_player_id());
+        }
+        if self.state.live_player_num() == 0 {
+            draw.draw_draw();
+        }
     }
 }
 
@@ -283,4 +301,13 @@ extern "C" {
 
     #[wasm_bindgen(method)]
     pub fn draw_timer(this: &Draw, _: c_int);
+
+    #[wasm_bindgen(method)]
+    pub fn draw_timeup(this: &Draw);
+
+    #[wasm_bindgen(method)]
+    pub fn draw_winner(this: &Draw, _: c_int);
+
+    #[wasm_bindgen(method)]
+    pub fn draw_draw(this: &Draw);
 }

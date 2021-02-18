@@ -169,8 +169,35 @@ export class Draw {
 
     draw_timer(second) {
         ctx.fillStyle = "black";
-        ctx.font = "16px serif";
-        ctx.textAlign = "left";
-        ctx.fillText("残り時間 " + second, 550, 100, 200);
+        ctx.font = "24px serif";
+        ctx.textAlign = "center";
+        ctx.fillText("残り時間 " + second, 580, 100, 200);
+    }
+
+    draw_timeup() {
+        ctx.fillStyle = "white";
+        ctx.font = "100px serif";
+        ctx.textAlign = "center";
+        ctx.fillText("Time Up!!", canvas.width / 2, canvas.height / 2);
+        ctx.strokeText("Time Up!!", canvas.width / 2, canvas.height / 2);
+    }
+
+    draw_winner(id) {
+        ctx.fillStyle = "white";
+        ctx.font = "100px serif";
+        ctx.textAlign = "center";
+        ctx.fillText("Winner", canvas.width / 2, canvas.height / 2 - 32 * 2);
+        ctx.strokeText("Winner", canvas.width / 2, canvas.height / 2 - 32 * 2);
+        ctx.fillText((id + 1) + "P", canvas.width / 2, canvas.height / 2 + 32 * 2);
+        ctx.strokeText((id + 1) + "P", canvas.width / 2, canvas.height / 2 + 32 * 2);
+
+    }
+
+    draw_draw() {
+        ctx.fillStyle = "white";
+        ctx.font = "100px serif";
+        ctx.textAlign = "center";
+        ctx.fillText("Draw", canvas.width / 2, canvas.height / 2);
+        ctx.strokeText("Draw", canvas.width / 2, canvas.height / 2);
     }
 }
