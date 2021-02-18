@@ -97,6 +97,15 @@
 /******/ 					"__wbg_drawtimer_5b6b0ea267d8a1bb": function(p0i32,p1i32) {
 /******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_drawtimer_5b6b0ea267d8a1bb"](p0i32,p1i32);
 /******/ 					},
+/******/ 					"__wbg_drawtimeup_52f540066ffc3d15": function(p0i32) {
+/******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_drawtimeup_52f540066ffc3d15"](p0i32);
+/******/ 					},
+/******/ 					"__wbg_drawwinner_8c7472cc35da5130": function(p0i32,p1i32) {
+/******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_drawwinner_8c7472cc35da5130"](p0i32,p1i32);
+/******/ 					},
+/******/ 					"__wbg_drawdraw_cb6f4e086802e08c": function(p0i32) {
+/******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_drawdraw_cb6f4e086802e08c"](p0i32);
+/******/ 					},
 /******/ 					"__wbg_playaudio_7eb0637ff62f5b37": function(p0i32,p1i32) {
 /******/ 						return installedModules["../pkg/bomberhuman_bg.js"].exports["__wbg_playaudio_7eb0637ff62f5b37"](p0i32,p1i32);
 /******/ 					},
@@ -243,7 +252,7 @@
 /******/ 				promises.push(installedWasmModuleData);
 /******/ 			else {
 /******/ 				var importObject = wasmImportObjects[wasmModuleId]();
-/******/ 				var req = fetch(__webpack_require__.p + "" + {"../pkg/bomberhuman_bg.wasm":"fb782de1d3fe97fc40d1"}[wasmModuleId] + ".module.wasm");
+/******/ 				var req = fetch(__webpack_require__.p + "" + {"../pkg/bomberhuman_bg.wasm":"c92cb759cf01c0c5a48d"}[wasmModuleId] + ".module.wasm");
 /******/ 				var promise;
 /******/ 				if(importObject instanceof Promise && typeof WebAssembly.compileStreaming === 'function') {
 /******/ 					promise = Promise.all([WebAssembly.compileStreaming(req), importObject]).then(function(items) {
